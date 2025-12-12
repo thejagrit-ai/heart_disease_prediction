@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">❤️</span>
+                Heart Disease Prediction System
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link" onclick="loadSection('home')">Home</a>
+                <a href="#" class="nav-link" onclick="loadSection('prediction')">Prediction</a>
+                <a href="#" class="nav-link" onclick="loadSection('disease-info')">Disease Info</a>
+                <a href="#" class="nav-link" onclick="loadSection('developers')">Developers</a>
+                <a href="#" class="nav-link admin-btn" onclick="showAdminLogin()">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminModal()">&times;</span>
+            <h2>Admin Login</h2>
+            <form id="admin-form">
+                <input type="email" id="admin-email" placeholder="Admin Email" required>
+                <input type="password" id="admin-password" placeholder="Admin Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="admin-message"></div>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <button onclick="logoutAdmin()" class="logout-btn">Logout</button>
+        </div>
+        <div class="admin-content">
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <h3>System Status</h3>
+                    <p class="status-online">✓ Online</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Model Accuracy</h3>
+                    <p class="accuracy">81.0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Features Used</h3>
+                    <p class="features">13 Medical Parameters</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Dataset Size</h3>
+                    <p class="dataset">500+ Records</p>
+                </div>
+            </div>
+            <div class="admin-info">
+                <h3>System Information</h3>
+                <p><strong>Project Name:</strong> Heart Disease Prediction using ML</p>
+                <p><strong>Version:</strong> 1.0.0</p>
+                <p><strong>Algorithm:</strong> Random Forest Classifier</p>
+                <p><strong>Framework:</strong> Flask + HTML5/CSS3/JavaScript</p>
+                <p><strong>Database:</strong> SQLite</p>
+                <p><strong>Status:</strong> Production Ready</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Section -->
+    <section id="home" class="section">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Advanced Heart Disease Prediction</h1>
+                <p>Using Machine Learning for Early Detection</p>
+                <p class="subtitle">Developed by: Jagrit Sharma, Abhishek Godara, Deepanshu</p>
+                <button onclick="loadSection('prediction')" class="cta-button">Start Prediction</button>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h2>Why Our System?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>High Accuracy</h3>
+                    <p>81% accuracy with advanced ML algorithms ensuring reliable predictions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>Get prediction results in seconds with real-time analysis</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Your medical data is secure with admin authentication</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Educational</h3>
+                    <p>Learn about heart disease causes, prevention, and management</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Personalized Recommendations</h3>
+                    <p>Get customized health recommendations based on your results</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h3>Medical Grade</h3>
+                    <p>Based on UCI Cleveland heart disease dataset and medical research</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section id="prediction" class="section">
+        <div class="prediction-container">
+            <h1>Heart Disease Risk Assessment</h1>
+            <p class="section-desc">Enter your medical parameters for prediction</p>
+
+            <div class="prediction-form-wrapper">
+                <form id="prediction-form" class="prediction-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="age">Age (years)</label>
+                            <input type="number" id="age" name="age" min="18" max="120" required>
+                            <small>Range: 18-120</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sex">Gender</label>
+                            <select id="sex" name="sex" required>
+                                <option value="">Select...</option>
+                                <option value="0">Female</option>
+                                <option value="1">Male</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cp">Chest Pain Type</label>
+                            <select id="cp" name="cp" required>
+                                <option value="">Select...</option>
+                                <option value="0">Typical Angina</option>
+                                <option value="1">Atypical Angina</option>
+                                <option value="2">Non-Angina Pain</option>
+                                <option value="3">Asymptomatic</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trestbps">Resting Blood Pressure (mm Hg)</label>
+                            <input type="number" id="trestbps" name="trestbps" min="80" max="250" required>
+                            <small>Normal: 90-120, Elevated: 120-130</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="chol">Serum Cholesterol (mg/dL)</label>
+                            <input type="number" id="chol" name="chol" min="100" max="600" required>
+                            <small>Desirable: <200, Borderline: 200-239, High: ≥240</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fbs">Fasting Blood Sugar > 120 mg/dL</label>
+                            <select id="fbs" name="fbs" required>
+                                <option value="">Select...</option>
+                                <option value="0">No (≤120)</option>
+                                <option value="1">Yes (>120)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="restecg">Resting ECG</label>
+                            <select id="restecg" name="restecg" required>
+                                <option value="">Select...</option>
+                                <option value="0">Normal</option>
+                                <option value="1">ST-T Abnormality</option>
+                                <option value="2">LV Hypertrophy</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thalach">Max Heart Rate Achieved</label>
+                            <input type="number" id="thalach" name="thalach" min="60" max="220" required>
+                            <small>Range: 60-220 bpm</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exang">Exercise Induced Angina</label>
+                            <select id="exang" name="exang" required>
+                                <option value="">Select...</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="oldpeak">ST Depression Induced by Exercise</label>
+                            <input type="number" id="oldpeak" name="oldpeak" min="0" max="10" step="0.1" required>
+                            <small>Range: 0-10</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="slope">Slope of Peak Exercise ST</label>
+                            <select id="slope" name="slope" required>
+                                <option value="">Select...</option>
+                                <option value="1">Upsloping</option>
+                                <option value="2">Flat</option>
+                                <option value="3">Downsloping</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ca">Major Vessels</label>
+                            <select id="ca" name="ca" required>
+                                <option value="">Select...</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thal">Thalassemia</label>
+                            <select id="thal" name="thal" required>
+                                <option value="">Select...</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Fixed Defect</option>
+                                <option value="2">Reversible Defect</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-predict">Analyze Risk</button>
+                        <button type="reset" class="btn-reset">Clear Form</button>
+                    </div>
+                </form>
+
+                <div id="result-container" class="result-container" style="display: none;">
+                    <div class="result-card" id="result-card">
+                        <!-- Result will be inserted here -->
+                    </div>
+                </div>
+
+                <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing your data...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Information Section -->
+    <section id="disease-info" class="section">
+        <div class="disease-container">
+            <h1>Heart Disease Information & Prevention</h1>
+            <p class="section-desc">Learn about causes, prevention, and management</p>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('what-is')">What is Heart Disease?</button>
+                <button class="tab-button" onclick="switchTab('how-develops')">How It Develops</button>
+                <button class="tab-button" onclick="switchTab('risk-factors')">Risk Factors</button>
+                <button class="tab-button" onclick="switchTab('prevention')">Prevention Tips</button>
+                <button class="tab-button" onclick="switchTab('warning-signs')">Warning Signs</button>
+            </div>
+
+            <div id="what-is" class="tab-content active">
+                <h2>What is Heart Disease?</h2>
+                <p>Heart disease refers to a range of conditions affecting the heart and blood vessels. The most common type is Coronary Artery Disease (CAD), caused by atherosclerosis - the buildup of cholesterol plaque in arteries that restricts blood flow to the heart.</p>
+                <h3>Types of Heart Disease:</h3>
+                <ul>
+                    <li><strong>Coronary Artery Disease (CAD):</strong> Narrowing of arteries due to plaque buildup</li>
+                    <li><strong>Heart Attack:</strong> Occurs when blood flow to heart is blocked by a clot</li>
+                    <li><strong>Arrhythmias:</strong> Irregular or abnormal heartbeat patterns</li>
+                    <li><strong>Heart Failure:</strong> Heart cannot pump enough blood to meet body's needs</li>
+                    <li><strong>Valve Disorders:</strong> Malfunction of heart valves</li>
+                </ul>
+            </div>
+
+            <div id="how-develops" class="tab-content">
+                <h2>How Does Heart Disease Develop?</h2>
+                <div class="stages">
+                    <div class="stage">
+                        <div class="stage-number">1</div>
+                        <h3>Plaque Formation</h3>
+                        <p>Cholesterol and other substances begin to form plaque in artery walls due to high cholesterol, high blood pressure, smoking, and other risk factors.</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-number">2</div>
+                        <h3>Plaque Buildup</h3>
+                        <p>Over years, plaque accumulates in the arteries, narrowing the passageways and reducing blood flow to the heart muscle.</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-number">3</div>
+                        <h3>Symptoms Appear</h3>
+                        <p>Reduced blood flow causes chest pain (angina), shortness of breath, and fatigue, especially during physical activity.</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-number">4</div>
+                        <h3>Critical Event</h3>
+                        <p>Plaque ruptures, triggering blood clot formation that completely blocks blood flow, causing heart attack or stroke.</p>
+                    </div>
+                    <div class="stage">
+                        <div class="stage-number">5</div>
+                        <h3>Long-term Damage</h3>
+                        <p>Repeated episodes lead to permanent heart muscle damage, potentially resulting in heart failure.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="risk-factors" class="tab-content">
+                <h2>Major Risk Factors for Heart Disease</h2>
+                <div class="factors-grid">
+                    <div class="factor-card">
+                        <h3>High Blood Pressure</h3>
+                        <p>>140/90 mmHg - Forces heart to work harder, damaging arteries</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>High Cholesterol</h3>
+                        <p>>240 mg/dL - Main ingredient in plaque that clogs arteries</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Smoking</h3>
+                        <p>Damages blood vessel walls and increases clotting risk</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Diabetes</h3>
+                        <p>3x higher heart disease risk, damages blood vessels</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Obesity</h3>
+                        <p>BMI >30 - Worsens all other risk factors significantly</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Physical Inactivity</h3>
+                        <p>Weakens heart, increases blood pressure and cholesterol</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Poor Diet</h3>
+                        <p>High in saturated fats, salt, and processed foods</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Age & Family History</h3>
+                        <p>Men >45, Women >55, or family history increases risk</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Chronic Stress</h3>
+                        <p>Elevates blood pressure and promotes inflammation</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3>Sleep Disorders</h3>
+                        <p><7 hours sleep linked to higher disease risk</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="prevention" class="tab-content">
+                <h2>Prevention and Management Tips</h2>
+                <div class="tips-list">
+                    <div class="tip-item">
+                        <span class="tip-icon">🥗</span>
+                        <div class="tip-content">
+                            <h3>Eat Heart-Healthy Diet</h3>
+                            <p>Follow Mediterranean or DASH diet. Include whole grains, fruits, vegetables, fatty fish (salmon, mackerel), nuts, and olive oil. Limit saturated fats, sodium, and added sugars.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🏃</span>
+                        <div class="tip-content">
+                            <h3>Exercise Regularly</h3>
+                            <p>Aim for 150 minutes of moderate aerobic activity per week. Include activities like brisk walking, running, cycling, or swimming. Gradually increase intensity.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🚭</span>
+                        <div class="tip-content">
+                            <h3>Quit Smoking</h3>
+                            <p>Smoking is the single most modifiable risk factor. Quitting immediately reduces your risk. Consult doctors about nicotine replacement therapies.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">⚖️</span>
+                        <div class="tip-content">
+                            <h3>Maintain Healthy Weight</h3>
+                            <p>Target BMI between 18.5-24.9. Even 5-10% weight loss can significantly reduce heart disease risk and improve blood pressure and cholesterol.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🧘</span>
+                        <div class="tip-content">
+                            <h3>Reduce Stress</h3>
+                            <p>Practice meditation, yoga, deep breathing exercises, or other relaxation techniques. Chronic stress damages the heart, so manage it actively.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">😴</span>
+                        <div class="tip-content">
+                            <h3>Get Adequate Sleep</h3>
+                            <p>Sleep 7-9 hours per night. Poor sleep increases inflammation, raises blood pressure, and increases heart disease risk significantly.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🍷</span>
+                        <div class="tip-content">
+                            <h3>Limit Alcohol</h3>
+                            <p>Moderate drinking only - no more than 1 drink per day for women, 2 for men. Excessive alcohol raises blood pressure and damages the heart.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">📊</span>
+                        <div class="tip-content">
+                            <h3>Monitor Health Metrics</h3>
+                            <p>Regular checkups for blood pressure, cholesterol, and blood sugar levels. Know your numbers and track changes over time.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">💊</span>
+                        <div class="tip-content">
+                            <h3>Take Medications as Prescribed</h3>
+                            <p>If prescribed statins, blood pressure, or other medications, take them consistently. Never stop without consulting your doctor.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">❤️</span>
+                        <div class="tip-content">
+                            <h3>Manage Other Conditions</h3>
+                            <p>Control diabetes, hypertension, and other chronic conditions. Uncontrolled conditions accelerate heart disease development.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="warning-signs" class="tab-content">
+                <h2>Warning Signs - Seek Immediate Medical Care</h2>
+                <div class="warning-grid">
+                    <div class="warning-item">
+                        <h3>⚠️ Chest Pain or Pressure</h3>
+                        <p>Especially during physical activity or stress. May feel like heaviness, squeezing, or burning sensation. Classic sign of inadequate blood flow.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Shortness of Breath</h3>
+                        <p>At rest or during minimal activity. Indicates heart's inability to pump blood efficiently to meet oxygen demands.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Sudden Severe Dizziness</h3>
+                        <p>Or fainting spells suggest abnormal heart rhythms or severely reduced blood flow to the brain.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Unusual Fatigue</h3>
+                        <p>Unexplained weakness or tiredness, especially if new or worsening. May indicate heart failure or poor circulation.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Heart Palpitations</h3>
+                        <p>Feeling heart racing, skipping beats, or fluttering. Can indicate arrhythmias requiring immediate attention.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Persistent Nausea</h3>
+                        <p>Or cold sweats, especially with chest discomfort. Classic heart attack symptoms that need emergency care.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Swelling in Lower Extremities</h3>
+                        <p>Legs, ankles, or feet swelling indicates fluid retention from heart failure or circulation problems.</p>
+                    </div>
+                    <div class="warning-item">
+                        <h3>⚠️ Exercise Intolerance</h3>
+                        <p>Sudden inability to perform activities previously tolerated suggests declining heart function.</p>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <h3>🚑 CALL EMERGENCY SERVICES (112) IMMEDIATELY IF YOU EXPERIENCE:</h3>
+                    <p>• Severe chest pain or pressure lasting >15 minutes</p>
+                    <p>• Chest pain accompanied by shortness of breath, nausea, or sweating</p>
+                    <p>• Sudden severe shortness of breath</p>
+                    <p>• Sudden loss of consciousness or severe dizziness</p>
+                    <p>• Symptoms suggest a heart attack or stroke</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Developers Section -->
+    <section id="developers" class="section">
+        <div class="developers-container">
+            <h1>Project Information & Developers</h1>
+
+            <div class="project-info">
+                <div class="info-card">
+                    <h2>Project Details</h2>
+                    <p><strong>Project Name:</strong> Heart Disease Prediction using Machine Learning</p>
+                    <p><strong>A Data-Driven Approach for Early Detection</strong></p>
+                    <p><strong>Faculty:</strong> School of Engineering & Technology</p>
+                    <p><strong>Department:</strong> Department of Computer Applications</p>
+                    <p><strong>Supervisor:</strong> Dr. Megha Chhabra</p>
+                    <p><strong>Program:</strong> Bachelor of Computer Application (AIML Specialization)</p>
+                    <p><strong>Version:</strong> 1.0.0 (Production Ready)</p>
+                    <p><strong>Project Duration:</strong> 2-3 Months</p>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin-top: 40px;">Development Team</h2>
+            <div class="developers-grid">
+                <div class="developer-card">
+                    <div class="dev-avatar">JS</div>
+                    <h3>Jagrit Sharma</h3>
+                    <p class="roll-no">Roll No: 231348043</p>
+                    <p class="role">Data Preprocessing,Visualization & Machine Learning</p>
+                    <p class="contribution">
+                        • Data preprocessing and cleaning<br>
+                        • Feature engineering and selection<br>
+                        • Exploratory data analysis (EDA)<br>
+                        • Dataset visualization using Python<br>
+                        • Machine learning model development<br>
+                        • Model evaluation and validation<br>
+                        • Completed 40-hour Python training course
+                    </p>
+                </div>
+
+                <div class="developer-card">
+                    <div class="dev-avatar">AG</div>
+                    <h3>Abhishek Godara</h3>
+                    <p class="roll-no">Roll No: 231348045</p>
+                    <p class="role">Model Building & Optimization</p>
+                    <p class="contribution">
+                        • Machine learning model development<br>
+                        • Multiple algorithm implementation<br>
+                        • Hyperparameter tuning<br>
+                        • Model evaluation and validation<br>
+                        • Completed LLM training from Google Cloud
+                    </p>
+                </div>
+
+                <div class="developer-card">
+                    <div class="dev-avatar">D</div>
+                    <h3>Deepanshu</h3>
+                    <p class="roll-no">Roll No: 231348046</p>
+                    <p class="role">Full-Stack Development & Documentation</p>
+                    <p class="contribution">
+                        • Frontend UI/UX design and development<br>
+                        • Backend API development (Flask)<br>
+                        • Dynamic input script creation<br>
+                        • Complete project documentation<br>
+                        • Completed 30-hour Python training course
+                    </p>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <h2>Technologies & Tools Used</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h3>Programming Languages</h3>
+                        <p>Python 3.x, JavaScript, HTML5, CSS3</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Machine Learning</h3>
+                        <p>Scikit-learn, Pandas, NumPy, XGBoost</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Backend Framework</h3>
+                        <p>Flask, Flask-CORS, Flask-HTTPAuth</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Frontend</h3>
+                        <p>HTML5, CSS3, Vanilla JavaScript</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Database</h3>
+                        <p>SQLite for local deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Deployment</h3>
+                        <p>VS Code, Anaconda (Miniconda)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sdg-section">
+                <h2>Sustainable Development Goal</h2>
+                <div class="sdg-card">
+                    <h3>SDG Goal 3: Good Health and Well-Being</h3>
+                    <p>"Ensure healthy lives and promote well-being for all at all ages"</p>
+                    <p>Our project contributes to early detection and prevention of heart disease, helping reduce premature mortality and promoting healthier lives globally.</p>
+                </div>
+            </div>
+
+            <div class="acknowledgements">
+                <h2>Acknowledgements</h2>
+                <p>We acknowledge the use of the UCI Heart Disease Cleveland Dataset, which contains 303 patient records with 14 attributes. The dataset is freely available on Kaggle and has been instrumental in training our prediction model.</p>
+                <p>We also acknowledge the contributions of the open-source community, particularly the developers of Scikit-learn, Flask, Pandas, and NumPy libraries.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Heart Disease Prediction System. All rights reserved.</p>
+            <p>Developed by: Jagrit Sharma, Abhishek Godara, Deepanshu | Supervised by: Dr. Megha Chhabra</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
